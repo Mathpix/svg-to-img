@@ -3,6 +3,8 @@
 #### A node.js library to convert SVGs to images built with [Puppeteer](https://github.com/GoogleChrome/puppeteer).
 
 
+**NOTE:** This is a fork from Etienne Martin’s <a href="https://github.com/etienne-martin/svg-to-img">svg-to-img</a> which adds the possibility to connect to a Puppeteer endpoint (see <a href="https://github.com/etienne-martin/svg-to-img/pull/19">here</a>).
+
 [![Coveralls github](https://img.shields.io/coveralls/github/etienne-martin/svg-to-img.svg)](https://coveralls.io/github/etienne-martin/svg-to-img)
 [![CircleCI build](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)](https://circleci.com/gh/etienne-martin/svg-to-img)
 [![node version](https://img.shields.io/node/v/svg-to-img.svg)](https://www.npmjs.com/package/svg-to-img)
@@ -16,7 +18,7 @@
 To use svg-to-img in your project, run:
 
 ```bash
-npm install svg-to-img -S
+npm install @nodepit/svg-to-img -S
 ```
 
 Note: When you install svg-to-img, it downloads a recent version of Chromium (~170Mb Mac, ~282Mb Linux, ~280Mb Win) that is guaranteed to work with the library. If you want to skip downloading Chromium and instead [connect to a browser websocket endpoint](#svgtoimgconnectoptions), set the [`PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`](https://github.com/puppeteer/puppeteer/blob/v2.0.0/docs/api.md#environment-variables) environment variable.
