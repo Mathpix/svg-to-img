@@ -5,11 +5,11 @@
 
 **NOTE:** This is a fork from Etienne Martin’s <a href="https://github.com/etienne-martin/svg-to-img">svg-to-img</a> which adds the possibility to connect to a Puppeteer endpoint (see <a href="https://github.com/etienne-martin/svg-to-img/pull/19">here</a>).
 
-[![Coveralls github](https://img.shields.io/coveralls/github/etienne-martin/svg-to-img.svg)](https://coveralls.io/github/etienne-martin/svg-to-img)
-[![CircleCI build](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)](https://circleci.com/gh/etienne-martin/svg-to-img)
-[![node version](https://img.shields.io/node/v/svg-to-img.svg)](https://www.npmjs.com/package/svg-to-img)
-[![npm version](https://img.shields.io/npm/v/svg-to-img.svg)](https://www.npmjs.com/package/svg-to-img)
-[![npm monthly downloads](https://img.shields.io/npm/dm/svg-to-img.svg)](https://www.npmjs.com/package/svg-to-img)
+<!-- [![Coveralls github](https://img.shields.io/coveralls/github/etienne-martin/svg-to-img.svg)](https://coveralls.io/github/etienne-martin/svg-to-img) -->
+<!-- [![CircleCI build](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)](https://circleci.com/gh/etienne-martin/svg-to-img) -->
+[![node version](https://img.shields.io/node/v/%40nodepit%2Fsvg-to-img.svg)](https://www.npmjs.com/package/%40nodepit%2Fsvg-to-img)
+[![npm version](https://img.shields.io/npm/v/%40nodepit%2Fsvg-to-img.svg)](https://www.npmjs.com/package/%40nodepit%2Fsvg-to-img)
+[![npm monthly downloads](https://img.shields.io/npm/dm/%40nodepit%2Fsvg-to-img.svg)](https://www.npmjs.com/package/%40nodepit%2Fsvg-to-img)
 
 ## Getting Started
 
