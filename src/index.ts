@@ -159,3 +159,5 @@ export const from = (svg: Buffer|string) => {
 export const connect = (options: IConnectOptions) => {
   return new SvgToImg(new BrowserSource(async () => puppeteer.connect(options)));
 }
+
+export { IOptions, IShorthandOptions, IConnectOptions };
