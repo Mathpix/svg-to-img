@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import * as puppeteer from "puppeteer";
+import { Browser } from "puppeteer";
 import { IOptions, IShorthandOptions, IConnectOptions } from "./typings";
 export declare class BrowserSource {
     private readonly factory;
@@ -7,8 +7,8 @@ export declare class BrowserSource {
     private browserDestructionTimeout;
     private browserInstance;
     private browserState;
-    constructor(factory: () => Promise<puppeteer.Browser>);
-    getBrowser(): Promise<puppeteer.Browser>;
+    constructor(factory: () => Promise<Browser>);
+    getBrowser(): Promise<Browser>;
     scheduleBrowserForDestruction(): void;
     private executeQueuedRequests;
 }
@@ -27,6 +27,6 @@ export declare class SvgToImg {
     constructor(browserSource: BrowserSource);
     from(svg: Buffer | string): Svg;
 }
-export declare const from: (svg: string | Buffer) => Svg;
+export declare const from: (svg: Buffer | string) => Svg;
 export declare const connect: (options: IConnectOptions) => SvgToImg;
 export { IOptions, IShorthandOptions, IConnectOptions };

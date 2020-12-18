@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.renderSvg = exports.writeFileAsync = exports.stringifyFunction = exports.getFileTypeFromPath = void 0;
 const fs = require("fs");
 exports.getFileTypeFromPath = (path) => {
     return path.toLowerCase().replace(new RegExp("jpg", "g"), "jpeg").split(".").reverse()[0];

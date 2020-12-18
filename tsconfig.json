@@ -6,6 +6,7 @@
     "declaration": true,
     "noImplicitAny": true,
     "outDir": "./dist",
+    "skipLibCheck": true,
     "lib": [
       "dom",
       "es2017"
@@ -15,6 +16,10 @@
     "src/**/*"
   ],
   "exclude": [
-    "src/tests"
+    "src/tests",
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts",
   ]
 }

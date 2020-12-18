@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.connect = exports.from = exports.SvgToImg = exports.Svg = exports.BrowserSource = void 0;
+const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer");
 const helpers_1 = require("./helpers");
 const constants_1 = require("./constants");
@@ -80,20 +82,20 @@ class Svg {
     }
     ;
     async toPng(options) {
-        return this.convertSvg(this.svg, Object.assign({}, constants_1.defaultPngShorthandOptions, options), this.browserSource);
+        return this.convertSvg(this.svg, Object.assign(Object.assign({}, constants_1.defaultPngShorthandOptions), options), this.browserSource);
     }
     ;
     async toJpeg(options) {
-        return this.convertSvg(this.svg, Object.assign({}, constants_1.defaultJpegShorthandOptions, options), this.browserSource);
+        return this.convertSvg(this.svg, Object.assign(Object.assign({}, constants_1.defaultJpegShorthandOptions), options), this.browserSource);
     }
     ;
     async toWebp(options) {
-        return this.convertSvg(this.svg, Object.assign({}, constants_1.defaultWebpShorthandOptions, options), this.browserSource);
+        return this.convertSvg(this.svg, Object.assign(Object.assign({}, constants_1.defaultWebpShorthandOptions), options), this.browserSource);
     }
     ;
     async convertSvg(inputSvg, passedOptions, browserSource) {
         const svg = Buffer.isBuffer(inputSvg) ? inputSvg.toString("utf8") : inputSvg;
-        const options = Object.assign({}, constants_1.defaultOptions, passedOptions);
+        const options = Object.assign(Object.assign({}, constants_1.defaultOptions), passedOptions);
         const browser = await browserSource.getBrowser();
         const page = (await browser.pages())[0];
         // ⚠️ Offline mode is enabled to prevent any HTTP requests over the network
@@ -140,11 +142,29 @@ class SvgToImg {
     ;
 }
 exports.SvgToImg = SvgToImg;
-const defaultBrowserSource = new BrowserSource(async () => puppeteer.launch(constants_1.config.puppeteer));
+const defaultBrowserSource = new BrowserSource(async () => {
+    return process.env.IS_LOCAL && process.env.IS_LOCAL === "true"
+        ?
+            await puppeteer.launch(constants_1.config.puppeteer)
+        :
+            await chromium.puppeteer.launch({
+                args: chromium.args,
+                defaultViewport: chromium.defaultViewport,
+                executablePath: await chromium.executablePath,
+                headless: chromium.headless,
+                ignoreHTTPSErrors: true
+            });
+});
 exports.from = (svg) => {
     return new SvgToImg(defaultBrowserSource).from(svg);
 };
 /* istanbul ignore next */
 exports.connect = (options) => {
-    return new SvgToImg(new BrowserSource(async () => puppeteer.connect(options)));
+    return new SvgToImg(new BrowserSource(async () => {
+        return process.env.IS_LOCAL && process.env.IS_LOCAL === "true"
+            ?
+                puppeteer.connect(options)
+            :
+                chromium.puppeteer.connect(options);
+    }));
 };

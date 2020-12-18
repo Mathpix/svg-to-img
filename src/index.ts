@@ -1,18 +1,20 @@
+import { Browser } from "puppeteer";
+import * as chromium from "chrome-aws-lambda";
 import * as puppeteer from "puppeteer";
 import { getFileTypeFromPath, renderSvg, stringifyFunction, writeFileAsync } from "./helpers";
 import { config, defaultOptions, defaultPngShorthandOptions, defaultJpegShorthandOptions, defaultWebpShorthandOptions } from "./constants";
 import { IOptions, IShorthandOptions, IConnectOptions } from "./typings";
 
 export class BrowserSource {
-  private queue: Array<(result: puppeteer.Browser) => void> = [];
+  private queue: Array<(result: Browser) => void> = [];
   private browserDestructionTimeout: NodeJS.Timeout | undefined;
-  private browserInstance: puppeteer.Browser | undefined;
+  private browserInstance: Browser | undefined;
   private browserState: "closed" | "opening" | "open" = "closed";
 
-  constructor (private readonly factory: () => Promise<puppeteer.Browser>) {}
+  constructor (private readonly factory: () => Promise<Browser>) {}
 
-  public async getBrowser (): Promise<puppeteer.Browser> {
-    return new Promise(async (resolve: (result: puppeteer.Browser) => void, reject: (err: any) => void) => {
+  public async getBrowser (): Promise<Browser> {
+    return new Promise(async (resolve: (result: Browser) => void, reject: (err: any) => void) => {
       /* istanbul ignore if */
       if (this.browserDestructionTimeout) {
         clearTimeout(this.browserDestructionTimeout);
@@ -65,7 +67,7 @@ export class BrowserSource {
     }, 500);
   };
 
-  private executeQueuedRequests (browser: puppeteer.Browser) {
+  private executeQueuedRequests (browser: Browser) {
     for (const resolve of this.queue) {
       resolve(browser);
     }
@@ -149,7 +151,21 @@ export class SvgToImg {
   };
 }
 
-const defaultBrowserSource = new BrowserSource(async () => puppeteer.launch(config.puppeteer));
+const defaultBrowserSource = new BrowserSource(async () => {
+  return process.env.IS_LOCAL && process.env.IS_LOCAL==="true"
+    ?
+      await puppeteer.launch(config.puppeteer)
+    :
+      await chromium.puppeteer.launch(
+        {
+          args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath,
+          headless: chromium.headless,
+          ignoreHTTPSErrors: true
+        }
+      )
+});
 
 export const from = (svg: Buffer|string) => {
   return new SvgToImg(defaultBrowserSource).from(svg);
@@ -157,7 +173,13 @@ export const from = (svg: Buffer|string) => {
 
 /* istanbul ignore next */
 export const connect = (options: IConnectOptions) => {
-  return new SvgToImg(new BrowserSource(async () => puppeteer.connect(options)));
+  return new SvgToImg(new BrowserSource(async () => {
+    return process.env.IS_LOCAL && process.env.IS_LOCAL==="true"
+      ?
+        puppeteer.connect(options)
+      :
+      chromium.puppeteer.connect(options)
+  }));
 }
 
 export { IOptions, IShorthandOptions, IConnectOptions };
