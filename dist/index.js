@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = exports.from = exports.SvgToImg = exports.Svg = exports.BrowserSource = void 0;
 const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer");
+const puppeteer = process.env.IS_LOCAL && process.env.IS_LOCAL === "true"
+    ? require("puppeteer")
+    : chromium.puppeteer;
 const helpers_1 = require("./helpers");
 const constants_1 = require("./constants");
 class BrowserSource {
@@ -52,7 +54,7 @@ class BrowserSource {
         if (this.browserDestructionTimeout) {
             clearTimeout(this.browserDestructionTimeout);
         }
-        this.browserDestructionTimeout = setTimeout(async () => {
+        this.browserDestructionTimeout = global.setTimeout(async () => {
             /* istanbul ignore next */
             if (this.browserInstance) {
                 this.browserState = "closed";
@@ -147,7 +149,7 @@ const defaultBrowserSource = new BrowserSource(async () => {
         ?
             await puppeteer.launch(constants_1.config.puppeteer)
         :
-            await chromium.puppeteer.launch({
+            await puppeteer.launch({
                 args: chromium.args,
                 defaultViewport: chromium.defaultViewport,
                 executablePath: await chromium.executablePath,
@@ -161,10 +163,6 @@ exports.from = (svg) => {
 /* istanbul ignore next */
 exports.connect = (options) => {
     return new SvgToImg(new BrowserSource(async () => {
-        return process.env.IS_LOCAL && process.env.IS_LOCAL === "true"
-            ?
-                puppeteer.connect(options)
-            :
-                chromium.puppeteer.connect(options);
+        return puppeteer.connect(options);
     }));
 };

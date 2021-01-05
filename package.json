@@ -106,6 +106,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@types/node": "^14.14.20",
     "chrome-aws-lambda": "^5.5.0",
     "puppeteer-core": "^5.5.0"
   }
